@@ -6,7 +6,7 @@ class StoreModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
 
-    items = db.relationship("ItemModel", lazy = 'dynamic')
+    items = db.relationship('ItemModel', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
@@ -16,8 +16,7 @@ class StoreModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-    #Connect to database, get a cursor, select the item, run the query, fetch row, close connection,if row exists return JSON
-        return cls.query.filter_by(name=name).first() # SELECT * FROM items WHERE name=name
+        return cls.query.filter_by(name=name).first()
 
     def save_to_db(self):
         db.session.add(self)

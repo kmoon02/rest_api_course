@@ -8,21 +8,19 @@ class Item(Resource):
         type=float,
         required=True,
         help="This field cannot be left blank!"
-        )
-
+    )
     parser.add_argument('store_id',
         type=int,
         required=True,
-        help="Every item needs a store id"
-        )
+        help="Every item needs a store id."
+    )
 
     @jwt_required()
-    # Retrieve item from database, if in, return the name and price
     def get(self, name):
         item = ItemModel.find_by_name(name)
         if item:
             return item.json()
-        return {'message': "Item not found"}, 404
+        return {'message': 'Item not found'}, 404
 
     def post(self, name):
         if ItemModel.find_by_name(name):
@@ -31,10 +29,11 @@ class Item(Resource):
         data = Item.parser.parse_args()
 
         item = ItemModel(name, **data)
+
         try:
             item.save_to_db()
         except:
-            return {'message': 'An error occurred inserting the item.'}, 500 # Internal server error
+            return {"message": "An error occurred inserting the item."}, 500
 
         return item.json(), 201
 
@@ -62,4 +61,4 @@ class Item(Resource):
 
 class ItemList(Resource):
     def get(self):
-        return {'items':[item.json() for item in ItemModel.query.all()]}
+        return {'items': [x.json() for x in ItemModel.query.all()]}
